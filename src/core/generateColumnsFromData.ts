@@ -31,16 +31,14 @@ export const generateColumnsFromData = (data: any[]): CustomColumn[] => {
 
   return Object.keys(sample).map((key) => {
     const value = sample[key];
-    const type = detectType(value);
-
     return {
       id: key,
       key,
-      title: key.charAt(0).toUpperCase() + key.slice(1),
+      title: convertToTitle(key),
       dataIndex: key,
-      type,
+      type: detectType(value),
       visible: true,
-      locked: ["id", "name", "email"].includes(key), // örnek kilitli kolonlar
+      locked: ["id", "name", "email"].includes(key),
     };
   });
 };

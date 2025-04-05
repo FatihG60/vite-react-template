@@ -29,9 +29,12 @@ import { exportData } from "../core/exportToExcel";
 import { exportToPDF } from "../core/exportToPdf";
 import { CustomColumn } from "../types/CustomColumn";
 import dayjs from "dayjs";
-import { convertToTitle, detectType } from "../core/generateColumnsFromData";
-import { mockData1, mockData2, mockData3 } from "../constants/mockData";
-import { extendedMockData } from "../constants/extendedMockData";
+import {
+  convertToTitle,
+  detectType,
+  generateColumnsFromData,
+} from "../core/generateColumnsFromData";
+import { largeMockData } from "../constants/largeMockData";
 
 const App: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
@@ -61,6 +64,8 @@ const App: React.FC = () => {
             key: col.key,
             fixed: col.fixed,
             ...getColumnSearchProps(col.dataIndex),
+            width: 100,
+            ellipsis: true,
           };
 
           if (col.type === "date") {
@@ -82,23 +87,11 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      const fetchedData = extendedMockData;
+      const fetchedData = largeMockData;
 
       setData(fetchedData);
       if (!isColumnInit) {
-        const sample = fetchedData[0];
-        const cols: CustomColumn[] = Object.keys(sample).map((key) => {
-          const value = sample[key as keyof typeof sample];
-          return {
-            id: key,
-            key,
-            dataIndex: key,
-            title: convertToTitle(key),
-            type: detectType(value),
-            visible: true,
-            locked: ["id", "name", "email"].includes(key),
-          };
-        });
+        const cols: CustomColumn[] = generateColumnsFromData(fetchedData);
         setCustomColumns(cols);
         setIsColumnInit(true);
       }
@@ -245,7 +238,7 @@ const App: React.FC = () => {
             setPagination({ current: 1, pageSize: size }),
         }}
         bordered
-        scroll={{ x: "max-content" }}
+        scroll={{ x: "max-content", y: 55 * 10 }}
       />
 
       <Modal
