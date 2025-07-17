@@ -221,6 +221,7 @@ const App: React.FC = () => {
       </Space>
 
       <Table
+        rowKey="id"
         loading={loading}
         columns={dynamicColumns}
         dataSource={filteredData}
