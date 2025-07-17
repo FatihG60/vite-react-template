@@ -64,7 +64,7 @@ const App: React.FC = () => {
             key: col.key,
             fixed: col.fixed,
             ...getColumnSearchProps(col.dataIndex),
-            width: 100,
+            width: Math.max(col.title.length * 10, 100),
             ellipsis: true,
           };
 
