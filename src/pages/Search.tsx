@@ -240,13 +240,6 @@ const SearchPage = () => {
                   icon={<InsertRowBelowOutlined />}
                   onClick={() => setShowKeyboard(true)}
                 />
-                {showKeyboard && (
-                  <FloatingKeyboard
-                    initialValue={query}
-                    onInput={setQuery}
-                    onClose={() => setShowKeyboard(false)}
-                  />
-                )}
 
                 <div className="flex justify-center">
                   <Space wrap size={32}>
@@ -302,6 +295,13 @@ const SearchPage = () => {
           />
         )}
       </Card>
+      {showKeyboard && (
+        <FloatingKeyboard
+          initialValue={query}
+          onInput={setQuery}
+          onClose={() => setShowKeyboard(false)}
+        />
+      )}
     </div>
   );
 };

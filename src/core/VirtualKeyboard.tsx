@@ -58,6 +58,7 @@ const FloatingKeyboard = ({
       nodeRef={draggableRef}
       handle=".floating-keyboard-header"
       grid={[5, 5]}
+      bounds="parent"
     >
       <div
         ref={draggableRef}
