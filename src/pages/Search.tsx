@@ -11,21 +11,26 @@ import {
   Card,
   Row,
   Col,
+  Modal,
 } from "antd";
 import {
   DownOutlined,
   FilePdfOutlined,
   FileTextOutlined,
   GlobalOutlined,
+  InsertRowBelowOutlined,
   PictureOutlined,
   SearchOutlined,
   UpOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
+import Draggable from "react-draggable";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Dayjs } from "dayjs";
 import { RangePickerProps } from "antd/es/date-picker";
+import VirtualKeyboard from "../core/VirtualKeyboard";
+import FloatingKeyboard from "../core/VirtualKeyboard";
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -72,7 +77,12 @@ const mockResults = [
 ];
 
 const SearchPage = () => {
+  const activeInputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(
+    null
+  );
+
   const [query, setQuery] = useState("");
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const [brands, setBrands] = useState<string[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
@@ -80,6 +90,18 @@ const SearchPage = () => {
   const [activeTab, setActiveTab] = useState<string>("");
   const [showSearchBox, setShowSearchBox] = useState(true);
   const [showResultBox, setShowResultBox] = useState(true);
+
+  useEffect(() => {
+    const handleFocus = (e: Event) => {
+      const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
+        activeInputRef.current = target;
+      }
+    };
+
+    document.addEventListener("focusin", handleFocus);
+    return () => document.removeEventListener("focusin", handleFocus);
+  }, []);
 
   const now = dayjs();
 
@@ -214,6 +236,17 @@ const SearchPage = () => {
                     <Button icon={<SearchOutlined />} onClick={handleSearch} />
                   }
                 />
+                <Button
+                  icon={<InsertRowBelowOutlined />}
+                  onClick={() => setShowKeyboard(true)}
+                />
+                {showKeyboard && (
+                  <FloatingKeyboard
+                    initialValue={query}
+                    onInput={setQuery}
+                    onClose={() => setShowKeyboard(false)}
+                  />
+                )}
 
                 <div className="flex justify-center">
                   <Space wrap size={32}>
