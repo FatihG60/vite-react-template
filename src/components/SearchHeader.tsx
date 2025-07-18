@@ -32,7 +32,7 @@ const AppHeader = () => {
     {
       key: "1",
       label: (
-        <span onClick={() => navigate("/search/dashboard")}>
+        <span onClick={() => navigate("/management/dashboard")}>
           <DashboardOutlined /> Dashboard
         </span>
       ),
@@ -40,7 +40,7 @@ const AppHeader = () => {
     {
       key: "2",
       label: (
-        <span onClick={() => navigate("/search/reports")}>
+        <span onClick={() => navigate("/management/reports")}>
           <FileTextOutlined /> Raporlar
         </span>
       ),
@@ -48,7 +48,7 @@ const AppHeader = () => {
     {
       key: "3",
       label: (
-        <span onClick={() => navigate("/search/analytics")}>
+        <span onClick={() => navigate("/management/analytics")}>
           <BarChartOutlined /> Analiz
         </span>
       ),
@@ -56,7 +56,7 @@ const AppHeader = () => {
     {
       key: "4",
       label: (
-        <span onClick={() => navigate("/search/settings")}>
+        <span onClick={() => navigate("/management/settings")}>
           <SettingOutlined /> Ayarlar
         </span>
       ),
@@ -64,7 +64,7 @@ const AppHeader = () => {
     {
       key: "5",
       label: (
-        <span onClick={() => navigate("/search/profile")}>
+        <span onClick={() => navigate("/management/profile")}>
           <ProfileOutlined /> Profil
         </span>
       ),

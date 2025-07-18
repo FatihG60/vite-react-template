@@ -9,7 +9,7 @@ const SearchLayout = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <AppHeader />
-      <Content style={{ padding: '24px' }}>
+      <Content style={{ padding: 16 }}>
         <Outlet />
       </Content>
       <AppFooter />

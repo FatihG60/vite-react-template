@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./core/PrivateRoute";
 import ErrorPage from "./pages/ErrorPage";
+import Search from "./pages/Search";
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
@@ -28,15 +29,23 @@ const App = () => {
     >
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/main" element={<MainLayout />} />
-        <Route path="/search" element={<PrivateRoute><SearchLayout /></PrivateRoute>}>
-          <Route index element={<Profile />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="profile" element={<Profile />} />
+        {/*
+          <Route path="/login" element={<LoginForm />} />
+        <Route path="/main" element={<MainLayout />} /> 
+          */}
+        <Route
+          element={
+            <PrivateRoute>
+              <SearchLayout />
+            </PrivateRoute>
+          }
+        >
+          <Route path="/search" index element={<Search />} />
+          <Route path="/management/dashboard" element={<Dashboard />} />
+          <Route path="/management/reports" element={<Reports />} />
+          <Route path="/management/analytics" element={<Analytics />} />
+          <Route path="/management/settings" element={<Settings />} />
+          <Route path="/management/profile" element={<Profile />} />
         </Route>
         <Route path="/error" element={<ErrorPage />} />
         <Route path="*" element={<NotFound />} />
