@@ -12,7 +12,7 @@ import {
   Row,
   Col,
 } from "antd";
-import { DownOutlined, SearchOutlined, UpOutlined } from "@ant-design/icons";
+import { DownOutlined, FilePdfOutlined, FileTextOutlined, GlobalOutlined, PictureOutlined, SearchOutlined, UpOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import type { Dayjs } from "dayjs";
@@ -99,10 +99,21 @@ const SearchPage = () => {
   ];
 
   const categoryOptions = ["Web", "Haber", "Görsel", "Video", "PDF"];
-
+  const categoryIcons: Record<string, React.ReactNode> = {
+    Web: <GlobalOutlined />,
+    Haber: <FileTextOutlined />,
+    Görsel: <PictureOutlined />,
+    Video: <VideoCameraOutlined />,
+    PDF: <FilePdfOutlined />,
+  };
   const tabItems = categoryOptions.map((cat) => ({
-    label: cat,
     key: cat,
+    label: (
+      <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        {categoryIcons[cat]}
+        {cat}
+      </span>
+    ),
     children: (
       <Table
         dataSource={results.filter((item) => item.category === cat)}
