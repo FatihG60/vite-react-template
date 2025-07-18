@@ -12,10 +12,20 @@ import {
   Row,
   Col,
 } from "antd";
-import { DownOutlined, FilePdfOutlined, FileTextOutlined, GlobalOutlined, PictureOutlined, SearchOutlined, UpOutlined, VideoCameraOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  FilePdfOutlined,
+  FileTextOutlined,
+  GlobalOutlined,
+  PictureOutlined,
+  SearchOutlined,
+  UpOutlined,
+  VideoCameraOutlined,
+} from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import type { Dayjs } from "dayjs";
+import { RangePickerProps } from "antd/es/date-picker";
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -70,6 +80,19 @@ const SearchPage = () => {
   const [activeTab, setActiveTab] = useState<string>("");
   const [showSearchBox, setShowSearchBox] = useState(true);
   const [showResultBox, setShowResultBox] = useState(true);
+
+  const now = dayjs();
+
+  const rangePresets: RangePickerProps["presets"] = [
+    { label: "Son 1 Saat", value: [now.subtract(1, "hour"), now] },
+    { label: "Bugün", value: [now.startOf("day"), now.endOf("day")] },
+    { label: "Son 1 Gün", value: [now.subtract(1, "day"), now] },
+    { label: "Son 1 Hafta", value: [now.subtract(1, "week"), now] },
+    { label: "Son 1 Ay", value: [now.subtract(1, "month"), now] },
+    { label: "Son 3 Ay", value: [now.subtract(3, "month"), now] },
+    { label: "Son 6 Ay", value: [now.subtract(6, "month"), now] },
+    { label: "Son 1 Yıl", value: [now.subtract(1, "year"), now] },
+  ];
 
   const handleSearch = () => {
     const filtered = mockResults.filter((item) => {
@@ -156,11 +179,16 @@ const SearchPage = () => {
               >
                 {/* Arama içeriği */}
                 <RangePicker
+                  showTime
+                  allowClear
                   style={{ width: "100%" }}
+                  presets={rangePresets}
                   onChange={(dates) => {
-                    if (dates && dates[0] && dates[1])
+                    if (dates && dates[0] && dates[1]) {
                       setDateRange([dates[0], dates[1]]);
-                    else setDateRange(null);
+                    } else {
+                      setDateRange(null);
+                    }
                   }}
                 />
 
@@ -168,14 +196,18 @@ const SearchPage = () => {
                   mode="multiple"
                   allowClear
                   placeholder="Marka seçin"
+                  maxTagPlaceholder={(value) => `+${value.length} diğer`}
+                  maxTagCount={2}
+                  value={brands}
                   style={{ width: "100%" }}
                   onChange={setBrands}
                   options={brandOptions.map((b) => ({ label: b, value: b }))}
                 />
 
                 <Input
-                  placeholder="Kelime girin"
+                  placeholder="Arama yapın..."
                   value={query}
+                  allowClear
                   onChange={(e) => setQuery(e.target.value)}
                   onPressEnter={handleSearch}
                   suffix={
