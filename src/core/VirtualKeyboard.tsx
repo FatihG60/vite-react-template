@@ -49,7 +49,7 @@ const FloatingKeyboard = ({
     if (el) {
       el.value = input;
       el.dispatchEvent(new Event("input", { bubbles: true }));
-      //if (typeof onInput === "function") onInput(input);
+      if (typeof onInput === "function") onInput(input);
     }
   };
 

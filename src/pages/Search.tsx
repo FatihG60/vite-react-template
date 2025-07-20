@@ -31,6 +31,7 @@ import type { Dayjs } from "dayjs";
 import { RangePickerProps } from "antd/es/date-picker";
 import VirtualKeyboard from "../core/VirtualKeyboard";
 import FloatingKeyboard from "../core/VirtualKeyboard";
+import FloatingMapSelector from "../core/map/FloatingMapSelector";
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -90,6 +91,15 @@ const SearchPage = () => {
   const [activeTab, setActiveTab] = useState<string>("");
   const [showSearchBox, setShowSearchBox] = useState(true);
   const [showResultBox, setShowResultBox] = useState(true);
+  const [activeField, setActiveField] = useState<"searchQuery" | "date" | null>(
+    null
+  );
+  const [showMap, setShowMap] = useState(false);
+  const [location, setLocation] = useState<{
+    lat: number;
+    lng: number;
+    radius: number;
+  } | null>(null);
 
   useEffect(() => {
     const handleFocus = (e: Event) => {
@@ -102,6 +112,11 @@ const SearchPage = () => {
     document.addEventListener("focusin", handleFocus);
     return () => document.removeEventListener("focusin", handleFocus);
   }, []);
+
+  const onInput = (val: any) => {
+    if (activeField === "searchQuery") setQuery(val);
+    if (activeField === "date") setDateRange(val);
+  };
 
   const now = dayjs();
 
@@ -199,9 +214,27 @@ const SearchPage = () => {
                 size="middle"
                 style={{ width: "100%" }}
               >
+                <Button
+                  icon={<InsertRowBelowOutlined />}
+                  onClick={() => setShowKeyboard(true)}
+                />
+                <Button onClick={() => setShowMap(true)}>
+                  📍 Haritada Alan Seç
+                </Button>
+                {location && (
+                  <div>
+                    Seçilen Konum:{" "}
+                    <b>
+                      {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+                    </b>
+                    <br />
+                    Yarıçap: <b>{location.radius.toFixed(0)} metre</b>
+                  </div>
+                )}
                 {/* Arama içeriği */}
                 <RangePicker
                   showTime
+                  onFocus={() => setActiveField("date")}
                   allowClear
                   style={{ width: "100%" }}
                   presets={rangePresets}
@@ -230,15 +263,12 @@ const SearchPage = () => {
                   placeholder="Arama yapın..."
                   value={query}
                   allowClear
+                  onFocus={() => setActiveField("searchQuery")}
                   onChange={(e) => setQuery(e.target.value)}
                   onPressEnter={handleSearch}
                   suffix={
                     <Button icon={<SearchOutlined />} onClick={handleSearch} />
                   }
-                />
-                <Button
-                  icon={<InsertRowBelowOutlined />}
-                  onClick={() => setShowKeyboard(true)}
                 />
 
                 <div className="flex justify-center">
@@ -295,10 +325,18 @@ const SearchPage = () => {
           />
         )}
       </Card>
+      <FloatingMapSelector
+        open={showMap}
+        onClose={() => setShowMap(false)}
+        onSelect={(data) => {
+          setLocation(data);
+          setShowMap(false);
+        }}
+      />
       {showKeyboard && (
         <FloatingKeyboard
           initialValue={query}
-          onInput={setQuery}
+          onInput={onInput}
           onClose={() => setShowKeyboard(false)}
         />
       )}
