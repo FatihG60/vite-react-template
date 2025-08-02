@@ -29,12 +29,19 @@ const normalizePolygonCenter = (
 };
 
 
+
+import { useRef } from "react";
+
 const MapWithDraw = ({ onSelect }: { onSelect: Props["onSelect"] }) => {
   const map = useMap();
+  const drawnItemsRef = useRef<L.FeatureGroup | null>(null);
 
   useEffect(() => {
-    const drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems); // 🔥 edit ve remove için şart
+    if (!drawnItemsRef.current) {
+      drawnItemsRef.current = new L.FeatureGroup();
+      map.addLayer(drawnItemsRef.current);
+    }
+    const drawnItems = drawnItemsRef.current;
 
     const drawControl = new L.Control.Draw({
       draw: {
