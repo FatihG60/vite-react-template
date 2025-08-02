@@ -330,7 +330,7 @@ const SearchPage = () => {
         onClose={() => setShowMap(false)}
         onSelect={(data) => {
           setLocation(data);
-          setShowMap(false);
+          //setShowMap(false);
         }}
       />
       {showKeyboard && (
